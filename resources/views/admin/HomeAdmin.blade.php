@@ -50,8 +50,8 @@
       </div>
     </div>
   </div>
-  <script src="../../../../../public/admin/assets/js/sidebarmenu.js"></script>
-  <script src="../../../../../public/admin/assets/js/app.min.js"></script>
+  <script src="../../../../../public/admin/js/sidebarmenu.js"></script>
+  <script src="../../../../../public/admin/js/app.min.js"></script>
 </body>
 
 </html>
