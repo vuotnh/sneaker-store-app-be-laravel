@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Auth;
@@ -18,19 +19,20 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/admin/user', [HomeController::class, 'indexAdmin']);
+Route::get('/admin/user/{id}/edit', [HomeController::class, 'editUserAdmin']);
+Route::get('login', [HomeController::class, 'login'])->name("login");
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 
 Route::group([
     'prefix' => 'auth',
     'middleware' => ['auth:web', 'verified']
 ], function ($router) {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'getCurrentUser']);
     // Route::post('/change-pass', [AuthController::class, 'changePassWord']);
 });
@@ -38,6 +40,8 @@ Route::group([
     'prefix' => 'user',
     'middleware' => ['auth:web', 'verified']
 ], function ($router) {
+    Route::GET('/listUser', [UserController::class, 'show']);
+    Route::GET('/detailInfo/{id}', [UserController::class, 'detail']);
     Route::PATCH('/updateInfo/{user}', [UserController::class, 'update']);
     Route::DELETE('/deleteUser/{user}', [UserController::class, 'destroy']);
 });

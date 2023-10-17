@@ -11,7 +11,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,11 +23,11 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'firstName' => 'sometimes|required|max:255',
-            'lastNameName' => 'sometimes|required|max:255',
+            'lastName' => 'sometimes|required|max:255',
             'location' => 'sometimes|required|max:255',
             'phone' => 'sometimes|required|max:255',
             'password' => 'sometimes|required|max:255',
-            'avatarUrl' => 'sometimes|required|max:1000',
+            'avatar_id' => 'sometimes|required|max:1000',
         ];
     }
 }

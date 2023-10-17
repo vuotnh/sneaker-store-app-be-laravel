@@ -7,9 +7,9 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Jobs\SendMailOTP;
 // use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-// use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:web', ['except' => ['login', 'register']]);
+        $this->middleware('auth:web', ['except' => ['login', 'register', 'refresh']]);
     }
 
     public function login(LoginRequest $request) {
@@ -56,11 +56,11 @@ class AuthController extends Controller
         ));
 
         // verify using link 
-        // event(new Registered($newUser));
-        // Auth::login($newUser);
+        event(new Registered($newUser));
+        Auth::login($newUser);
 
         // verify using sendmail OTP background job
-        SendMailOTP::dispatch($newUser)->onQueue('register')->delay(now()->addMinute(1));
+        // SendMailOTP::dispatch($newUser)->onQueue('register')->delay(now()->addMinute(1));
 
         return response()->json([
             'message' => 'Register success',
@@ -87,7 +87,24 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        $token = auth()->getToken();
+        return $this->respondWithToken(auth()->refresh($token));
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ]);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return new UserResource($user);
+        $userList = User::all();
+        return new UserCollection($userList);
     }
 
     /**
@@ -23,7 +25,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $validated = $request->validated();
-        $user->update($validated);
+        User::where('id', $user['id'])->update($validated);
         return new UserResource($user);
     }
 
@@ -40,5 +42,10 @@ class UserController extends Controller
         $file = $request->file('avatar')->store('public', 'hello.txt');
  
         return $file;
+    }
+
+    public function detail(string $id) {
+        $info = User::where('id', $id)->with('avatar')->first();
+        return new UserResource($info);
     }
 }

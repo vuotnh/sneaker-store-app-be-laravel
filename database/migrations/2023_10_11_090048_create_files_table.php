@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('filePath')->nullable(false);
             $table->string('originName')->nullable(false);
             $table->string('fileExt')->nullable(false);
-            $table->float('fileSize');
+            $table->bigInteger('fileSize');
             $table->timestamps();
         });
     }

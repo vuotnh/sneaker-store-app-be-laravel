@@ -71,6 +71,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     public function avatar(): HasMany {
-        return $this->hasMany(File::class, 'id');
+        return $this->hasMany(File::class, 'id', 'avatar_id');
     }
 }

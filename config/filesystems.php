@@ -57,9 +57,17 @@ return [
         ],
 
         // custom storage
-        'public_uploads' => [
+        'images' => [
             'driver' => 'local',
-            'root'   => public_path(),
+            'root' => storage_path('app/public/images'),
+            'visibility' => 'public',
+            'url' => env('APP_URL').'/images',
+        ],
+        'audio' => [
+            'driver' => 'local',
+            'root' => storage_path('app/audio'),
+            'visibility' => 'public',
+            'url' => env('APP_URL').'/audio',
         ],
 
     ],
