@@ -1,0 +1,55 @@
+.list-image {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.image-card {
+    width: 300px;
+    height: auto;
+}
+
+.image-container {
+    width: fit-content;
+    max-width: 400px;
+    position: relative;
+    margin-right: 20px;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.icon {
+    margin-left: 5px;
+    color: white;
+}
+
+.image-add-button {
+    width: 100px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.newFileField {
+    display: none;
+}
+
+.button-add-file {
+    width: 70px;
+    height: 70px;
+}

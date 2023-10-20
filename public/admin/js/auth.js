@@ -1,29 +1,24 @@
-class Auth {
-    constructor (form, fields) {
-        this.fields = fields;
-        this.form = form;
-        this.validateOnSubmit();
-    }
+// $(document).ready(function () {});
 
-    validateOnSubmit () {
-        this.form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            let error = 0;
-            let formData = {};
-            this.fields.forEach((field) => {
-                const input = document.querySelector(`#${field}`);
-                formData[field] = input.value.trim();
-            })
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData),
-            }
+function validateOnSubmit(form, fields) {
+    form.addEventListener("submit", function login(event) {
+        event.preventDefault();
+        let error = 0;
+        let formData = {};
+        fields.forEach((field) => {
+            const input = document.querySelector(`#${field}`);
+            formData[field] = input.value.trim();
+        })
+        const options = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData),
+        }
 
-            fetch('http://localhost:8082/auth/login', options)
+        fetch('http://localhost:8082/auth/login', options)
             .then((response) => {
                 if (response.ok) {
                     return response.json();
@@ -33,17 +28,20 @@ class Auth {
             .then((data) => {
                 localStorage.setItem('access_token', data.access_token);
                 localStorage.setItem('expired_in', data.expires_in);
-                this.form.submit();
+                form.submit();
             })
 
-        })
-    }
+        // clear event listener
+        form.removeEventListener("submit", login);
+    })
 }
+
 
 const form = document.querySelector('.loginForm');
 
 
 if (form) {
     const fields = ["email", "password"];
-    const validator = new Auth(form, fields);
+    validateOnSubmit(form, fields);
 }
+

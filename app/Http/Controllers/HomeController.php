@@ -21,4 +21,20 @@ class HomeController extends Controller
     public function editUserAdmin() {
         return view('admin.UserEdit');
     }
+
+    public function categoryAdmin() {
+        return view('admin.CategoryAdmin');
+    }
+
+    public function addEditCategory() {
+        return view('admin.AddEditCategory');
+    }
+
+    public function addEditProduct() {
+        return view('admin.AddEditProduct');
+    }
+
+    public function productAdmin() {
+        return view('admin.ProductAdmin');
+    }
 }

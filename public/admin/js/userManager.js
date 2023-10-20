@@ -1,4 +1,5 @@
 
+// $(document).ready(function () { });
 async function getUserDetail() {
     try {
         const userId = window.location.href.split('/').reverse()[1];
@@ -28,66 +29,65 @@ async function getUserDetail() {
     }
 }
 
-class UserManager {
-    constructor(form, fields) {
-        this.fields = fields;
-        this.form = form;
-        this.validateOnSubmit();
-    }
 
-    validateOnSubmit() {
-        this.form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            let updatedData = {};
-            this.fields.forEach((field) => {
-                const input = document.querySelector(`#${field}`);
-                updatedData[field] = input.value.trim();
-            })
-            const avatar = document.querySelector('input.attachment_upload');
-            if (avatar.value !== '') {
-                const newAvatarFile = avatar.files[0];
-                const formData = new FormData();
-                formData.append('file', newAvatarFile);
-                const uploadedAvatar = await axiosInstance({
-                    method: 'POST',
-                    url: 'http://localhost:8082/file/upload',
-                    data: formData,
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                if (uploadedAvatar.status === 200) {
-                    updatedData['avatar_id'] = uploadedAvatar.data?.file?.id;
-                }
-            }
 
-            const userId = window.location.href.split('/').reverse()[1];
-
-            const updatedUser = await axiosInstance({
-                method: 'PATCH',
-                url: `http://localhost:8082/user/updateInfo/${userId}`,
-                data: updatedData,
+function validateOnSubmit(form, fields) {
+    form.addEventListener("submit", async function submitLogin(event) {
+        event.preventDefault();
+        let updatedData = {};
+        fields.forEach((field) => {
+            const input = document.querySelector(`#${field}`);
+            updatedData[field] = input.value.trim();
+        })
+        const avatar = document.querySelector('input.attachment_upload');
+        if (avatar.value !== '') {
+            const newAvatarFile = avatar.files[0];
+            const formData = new FormData();
+            formData.append('file', newAvatarFile);
+            const uploadedAvatar = await axiosInstance({
+                method: 'POST',
+                url: 'http://localhost:8082/file/upload',
+                data: formData,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data'
                 }
             })
-            if (updatedUser.status === 200) {
-                window.location.assign('/admin/user');
+            if (uploadedAvatar.status === 200) {
+                updatedData['avatar_id'] = uploadedAvatar.data?.file?.id;
+            }
+        }
+
+        const userId = window.location.href.split('/').reverse()[1];
+
+        const updatedUser = await axiosInstance({
+            method: 'PATCH',
+            url: `http://localhost:8082/user/updateInfo/${userId}`,
+            data: updatedData,
+            headers: {
+                'Content-Type': 'application/json',
             }
         })
-    }
+        if (updatedUser.status === 200) {
+            form.removeEventListener("submit", submitLogin);
+            window.location.assign('/admin/user');
+        }
+    })
 }
+
 
 function onSubmitEdit() {
     const form = document.querySelector('.editForm');
     if (form) {
         const fields = ['firstName', 'lastName', 'phone', 'email'];
-        const validator = new UserManager(form, fields);
+        validateOnSubmit(form, fields);
     }
 }
-
 
 (async () => {
     await getUserDetail();
 })()
+
+
+
+
 

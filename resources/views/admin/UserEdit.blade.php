@@ -55,7 +55,7 @@
                     </div>
                     <div class="mb-3 avatar-group">
                       <div class="main-img-preview">
-                        <img class="thumbnail img-preview" src="" title="Preview Logo" style="max-width: 400px; border-radius: 10px">
+                        <img class="thumbnail img-preview" src="" title="Preview Avatar" style="max-width: 400px; border-radius: 10px">
                       </div>
                       <div class="input-group" style="margin-top: 10px">
                         <div class="input-group-btn">

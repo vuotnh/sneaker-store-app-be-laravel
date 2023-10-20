@@ -24,6 +24,10 @@ class File extends Model
     ];
 
     public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'id', 'avatar_id');
+    }
+
+    public function productImage(): BelongsTo {
+        return $this->belongsTo(ProductImage::class, 'id', 'file_id');
     }
 }
