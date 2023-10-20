@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\QueryFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,5 +26,14 @@ class Product extends Model
 
     public function images(): HasMany {
         return $this->hasMany(ProductImage::class, 'product_id', null);
+    }
+
+    /**
+     * Tham khảo tạo scope filter trong model eloquent
+     *  https://viblo.asia/p/cach-query-filter-don-gian-hon-trong-laravel-naQZRykvKvx
+     *  https://viblo.asia/p/laravel-eloquent-technique-dedicated-query-string-filtering-oZVRg4XZMmg5
+     */
+    public function scopeFilter($query, QueryFilter $filters) {
+        return $filters->apply($query);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\ProductFilter;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Models\File as SavedFile;
@@ -15,10 +16,12 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function list()
+    public function list(ProductFilter $filters)
     {
-        $productList = Product::with('category', 'images', 'images.image')->get();
-        return new ProductCollection($productList);
+        // $productList = Product::with('category', 'images', 'images.image')->get();
+        // $product = (new Product)->newQuery(); // tạo instance của eloquent builder
+        $productv2 = Product::filter($filters)->get();
+        return new ProductCollection($productv2);
     }
 
     /**
