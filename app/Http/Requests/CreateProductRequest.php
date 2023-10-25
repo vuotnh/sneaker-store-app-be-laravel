@@ -25,7 +25,7 @@ class CreateProductRequest extends FormRequest
             'name' => 'required|string|max:1000',
             'description' => 'sometimes|string|max:5000',
             'price' => 'required',
-            'discountRage' => 'sometimes|required',
+            'discountRate' => 'sometimes|required',
             'category_id' => 'required|integer',
             'files' => 'sometimes|required'
         ];

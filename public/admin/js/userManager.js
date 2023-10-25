@@ -18,11 +18,14 @@ async function getUserDetail() {
         const avatarTag = document.querySelector("div.avatar-group img.img-preview");
         if (userDetailRes.status === 200) {
             const userData = userDetailRes.data?.data;
+            console.log(userData)
             firstNameTag.value = userData.firstName;
             lastNameTag.value = userData.lastName;
             phoneTag.value = userData.phone;
             emailTag.value = userData.email;
-            avatarTag.src = `http://localhost:8082/storage/images/${userData.avatar[0].name}`;
+            if (userData.avatar.length > 0) {
+                avatarTag.src = `http://localhost:8082/storage/images/${userData?.avatar[0]?.name}`;
+            }
         }
     } catch (err) {
         console.log(err);

@@ -87,8 +87,8 @@ Route::group([
     Route::get('/list', [ProductController::class, 'list']);
     Route::post('/store', [ProductController::class, 'store']);
     Route::GET('/productDetail/{id}', [ProductController::class, 'show']);
+    Route::delete('/delete/{product}', [ProductController::class, 'destroy']);
 
     // Route::patch('/update/{category}', [CategoryController::class, 'update']);
     // Route::get('/show/{category}', [CategoryController::class, 'show']);
-    // Route::delete('/delete/{category}', [CategoryController::class, 'destroy']);
 });

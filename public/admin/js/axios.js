@@ -20,9 +20,15 @@ axiosInstance.interceptors.response.use((response) => {
 }, async error => {
     const { response, config } = error;
     const status = response?.status;
-    if (status === 401) {
+    let recall = false
+    if (status === 401 && !recall) {
+        recall = true
         refreshToken();
         return axiosInstance(config);
+    }
+    
+    if (recall) {
+        window.location.assign('http://localhost:8082/login')
     }
     return Promise.reject(error);
 })
