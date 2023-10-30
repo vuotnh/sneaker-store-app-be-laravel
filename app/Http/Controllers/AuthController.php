@@ -32,6 +32,11 @@ class AuthController extends Controller
             return response()->json(['error' => 'User is not existed'], 404);
         }
 
+        if (!$user->email_verified_at) {
+            return response()->json(['error' => 'Email is not verified'], 500);
+
+        }
+
         if (! Hash::check($validator['password'], $user['password'], [])) {
             throw new \Exception('Password is incorrect');
         }

@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\File;
+use App\Models\Product;
+use App\Models\ProductImage;
+use App\Observers\FileObserver;
+use App\Observers\ProductImageObserver;
+use App\Observers\ProductObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +31,12 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // register ProductObserver for Product model
+        Product::observe(new ProductObserver);
+        // register ProductImageObserver for ProductImage model
+        ProductImage::observe(new ProductImageObserver);
+        //register FileObserver for File model
+        File::observe(new FileObserver);
     }
 
     /**

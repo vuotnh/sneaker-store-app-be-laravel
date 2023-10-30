@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'auth/*', 'user/*', 'file/*', 'category/*', 'product/*'], // add path need pass cors
 
     'allowed_methods' => ['*'],
 

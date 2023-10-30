@@ -34,7 +34,7 @@ Route::get('/admin/product/add', [HomeController::class, 'addEditProduct']);
 Route::get('/admin/product', [HomeController::class, 'productAdmin']);
 
 
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::middleware(['allow.cors'])->post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 

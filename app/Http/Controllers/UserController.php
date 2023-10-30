@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $userList = User::all();
+        $userList = User::with('avatar')->get();
         return new UserCollection($userList);
     }
 

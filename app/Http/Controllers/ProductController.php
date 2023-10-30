@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         // $productList = Product::with('category', 'images', 'images.image')->get();
         // $product = (new Product)->newQuery(); // tạo instance của eloquent builder
-        $productv2 = Product::filter($filters)->get();
+        $productv2 = Product::filter($filters)->with('category', 'images', 'images.image')->get();
         return new ProductCollection($productv2);
     }
 
@@ -96,6 +96,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        $productImage = ProductImage::where('product_id', $product['id'])->get();
         return response()->noContent();
     }
 }
