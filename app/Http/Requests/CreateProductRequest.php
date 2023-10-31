@@ -27,7 +27,8 @@ class CreateProductRequest extends FormRequest
             'price' => 'required',
             'discountRate' => 'sometimes|required',
             'category_id' => 'required|integer',
-            'files' => 'sometimes|required'
+            'uploadedNewFile' => 'sometimes',
+            'removeFileList' => 'sometimes',
         ];
     }
 }

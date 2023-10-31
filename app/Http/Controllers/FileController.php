@@ -30,4 +30,24 @@ class FileController extends Controller
         }
        
     }
+
+    public function uploadMultipleFile(Request $request) {
+        try {
+            $files = $request->file('file');
+            $fileIds = [];
+            foreach ($files as $file) {
+                $newFile = new File();
+                $newFile->name = $file->hashName();
+                $newFile->originName = $file->getClientOriginalName();
+                $newFile->fileExt = $file->extension();
+                $newFile->fileSize = $file->getSize();
+                $newFile->filePath = $file->storeAs('/', $file->hashName(), ['disk' => 'images']);
+                $newFile->save();
+                array_push($fileIds, $newFile['id']);
+            }
+            return response()->json(['message' => 'upload file success', 'fileIds' => $fileIds], 200);
+        } catch (Exception $e) {
+            echo $e;
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Filters\ProductFilter;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductResource;
 use App\Models\File as SavedFile;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -38,29 +39,27 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
         $data_validated = $request->validated();
+        $uploadedNewFile = $data_validated['uploadedNewFile'];
+        $removeFileList = $data_validated['removeFileList'];
+        unset($data_validated['uploadedNewFile']);
+        unset($data_validated['removeFileList']);
         // if ($request->hasFile('imageFile')) {
         $newProduct = Product::create($data_validated);
-
-        $listFile = $request->allFiles('file[]')['file'];
-
         $listNewProductFile = [];
-        foreach ( $listFile as $file) {
-            $newFile['name'] = $file->hashName();
-            $newFile['originName'] = $file->getClientOriginalName();
-            $newFile['fileExt'] = $file->extension();
-            $newFile['fileSize'] = $file->getSize();
-            $newFile['filePath'] = $file->storeAs('/', $file->hashName(), ['disk' => 'images']);
-            $savedFile = SavedFile::create($newFile);
-
+        foreach ( $uploadedNewFile as $newFileId) {
             array_push($listNewProductFile, [
                 'product_id' => $newProduct['id'],
-                'file_id' => $savedFile['id'],
+                'file_id' => $newFileId,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
         }
         
         ProductImage::insert($listNewProductFile);
+
+        if (count($removeFileList)) {
+            ProductImage::where(['product_id', '', $newProduct['id']])->whereIn('file_id', $removeFileList)->delete();
+        }
         
         return response()->json($newProduct);
     }
@@ -85,9 +84,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(CreateProductRequest $request, Product $product)
     {
-        //
+        $data_validated = $request->validated();
+        $uploadedNewFile = $data_validated['uploadedNewFile'];
+        $removeFileList = $data_validated['removeFileList'];
+        unset($data_validated['uploadedNewFile']);
+        unset($data_validated['removeFileList']);
+
+        if (count($uploadedNewFile)) {
+            $listNewProductFile = [];
+            foreach ( $uploadedNewFile as $newFileId) {
+                array_push($listNewProductFile, [
+                    'product_id' => $product['id'],
+                    'file_id' => $newFileId,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+            ProductImage::insert($listNewProductFile);
+        }
+
+        if (count($removeFileList)) {
+            ProductImage::whereIn('file_id', $removeFileList)->where([['product_id', $product['id']]])->delete();
+        }
+        Product::where('id', $product['id'])->update($data_validated);
+        return new ProductResource($product);
     }
 
     /**

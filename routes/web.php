@@ -63,6 +63,7 @@ Route::group([
     'prefix' => 'file',
 ], function ($router) {
     Route::post('/upload', [FileController::class, 'uploadSingleFile']);
+    Route::post('/uploadMultiple', [FileController::class, 'uploadMultipleFile']);
 });
 
 Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
@@ -88,7 +89,6 @@ Route::group([
     Route::post('/store', [ProductController::class, 'store']);
     Route::GET('/productDetail/{id}', [ProductController::class, 'show']);
     Route::delete('/delete/{product}', [ProductController::class, 'destroy']);
-
-    // Route::patch('/update/{category}', [CategoryController::class, 'update']);
+    Route::patch('/update/{product}', [ProductController::class, 'update']);
     // Route::get('/show/{category}', [CategoryController::class, 'show']);
 });
